@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="appClient" type="com.example.shdauthorizationserver.model.RegisteredClientStore"*/-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="Login + ' - ' + ${appClient.cname}">Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #d3d3d3;
+        }
+
+        .center-container {
+            display: flex;
+            font-family: Calibri, sans-serif;
+            background-color: #f8f9fa;
+            position: relative;
+            height: 70vh;
+            min-height: 42em;
+            width: 20%;
+            min-width: 25em;
+            margin: 20px auto auto;
+            box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2), 0 6px 100px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 4rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 100px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 9rem;
+            left: 10px;
+            right: 10px;
+        }
+
+        button[type="submit"] {
+            width: 50%;
+            color: #000000;
+            background-color: #6495ed;
+            margin-left: 25%;
+            margin-right: auto;
+        }
+
+        button[type="submit"]:hover {
+            color: #ffffff;
+            background-color: #4169e1;
+        }
+
+        .toast-container {
+            position: absolute;
+            top: 0;
+            right: 0rem;
+            opacity: 1;
+        }
+
+        @media (min-width: 1341px) {
+            .toast-container {
+                right: -30rem;
+            }
+        }
+
+        .toast {
+            background-color: #f5f5f5;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="center-container">
+
+    <div class="logo-container">
+        <!-- Placeholder for company logo and name -->
+        <img th:src="${appClient.logoUrl}" alt="Application Logo">
+        <h4 th:text="${appClient.cname}">Client Application Name</h4>
+        <hr class="ms-3 me-3">
+    </div>
+
+    <div class="form-container">
+        <form th:action="@{/authn}" method="post">
+            <fieldset>
+                <legend class="mb-4"><h5 style="text-align: center">Sign In</h5></legend>
+
+                <!-- Username input -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">
+                        Username
+                        <span style="color: #ff0000">*</span>
+                    </label>
+                    <input type="text" id="username" name="username" th:value="${param.username}" class="form-control"
+                           maxlength="50" required>
+                </div>
+
+                <!-- Password input -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">
+                        Password
+                        <span style="color: #ff0000">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" class="form-control" maxlength="30" required>
+                </div>
+
+                <!-- Remember Me checkbox -->
+                <div class="mb-3 form-check">
+                    <input type="checkbox" id="remember-me" name="remember-me" class="form-check-input">
+                    <label for="remember-me" class="form-check-label" style="color: #696969;">Remember Me</label>
+                </div>
+
+                <!-- Submit button -->
+                <div class="mb-5 mt-4">
+                    <button type="submit" class="btn">Log in</button>
+                </div>
+
+                <!-- Forgot Password -->
+                <div class="mb-3">
+                    <a th:href="@{/signin/forgot-password/{appClientId}(appClientId=${appClient.id})}" style="color: #696969;
+                 text-decoration: underline;">Forgot Password?</a>
+                </div>
+
+                <hr>
+
+                <div class="mb-5">
+                    <span style="color: #696969">Don't have an account?</span>
+                    <a th:href="@{/signin/register/{appClientId}(appClientId=${appClient.id})}" style="color: #6495ed;">
+                        Sign Up</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="toast-container p-3">
+        <!-- Display error message if authentication fails -->
+        <div th:if="${error != null}" class="toast fade show" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" th:text="${appClient.cname}">Client Application Name</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                <h6>Login Failed</h6>
+                <ul>
+                    <li th:text="${error}" />
+                </ul>
+            </div>
+        </div>
+
+        <!-- Display logout message if user is logged out -->
+        <div th:if="${param.logout != null}" class="toast fade show" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" th:text="${appClient.cname}">Client Application Name</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Logged out successfully.
+            </div>
+        </div>
+
+        <!-- Display success message if registration succeeds -->
+        <div th:if="${success != null}" class="toast fade show" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" th:text="${appClient.cname}">Client Application Name</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                Registration successful.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="appClient" type="com.example.shdauthorizationserver.model.RegisteredClientStore"*/-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="Register + ' - ' + ${appClient.cname}">Register</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background-color: #d3d3d3;
+        }
+
+        .center-container {
+            font-family: Calibri, sans-serif;
+            background-color: #f8f9fa;
+            position: relative;
+            height: 70vh;
+            min-height: 42em;
+            width: 20%;
+            min-width: 25em;
+            margin: 20px auto auto;
+            box-shadow: 0 4px 30px 0 rgba(0, 0, 0, 0.2), 0 6px 100px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 4rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 100px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 9rem;
+            left: 10px;
+            right: 10px;
+        }
+
+        ::placeholder {
+            color: #696969;
+            opacity: 0.5;
+        }
+
+        button[type="submit"] {
+            width: 50%;
+            color: #000000;
+            background-color: #6495ed;
+            margin-left: 25%;
+            margin-right: auto;
+        }
+
+        button[type="submit"]:hover {
+            color: #ffffff;
+            background-color: #4169e1;
+        }
+
+        .toast-container {
+            position: absolute;
+            top: 0;
+            right: 0rem;
+            opacity: 1;
+        }
+
+        @media (min-width: 1341px) {
+            .toast-container {
+                right: -30rem;
+            }
+        }
+
+        .toast {
+            background-color: #f5f5f5;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="center-container">
+    <div class="logo-container">
+        <!-- Placeholder for company logo and name -->
+            <img th:src="${appClient.logoUrl}" alt="Application Logo">
+        <h4 th:text="${appClient.cname}">Client Application Name</h4>
+        <hr class="ms-3 me-3">
+    </div>
+
+    <div class="form-container">
+        <form id="registerCustomerForm" th:action="@{/signin/register}" th:object="${customerRegistrationRequestDto}"
+              method="post" novalidate>
+            <fieldset>
+                <legend class="mb-4"><h5 style="text-align: center">Sign Up</h5></legend>
+
+                <div class="mb-3">
+                    <input type="text" id="clientId" name="clientId" class="form-control" th:value="${appClient.id}"
+                           hidden>
+                </div>
+
+                <!-- Username input -->
+                <div class="mb-3">
+                    <input type="text" id="username" name="username" class="form-control" maxlength="50" required
+                    placeholder="Username *" th:field="*{username}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('username')}"
+                           th:errors="*{username}"></small-->
+                </div>
+
+                <!-- Password input -->
+                <div class="mb-3">
+                    <input type="password" id="password" name="password" class="form-control" maxlength="30"
+                           required placeholder="Password *" th:field="*{password}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('password')}"
+                           th:errors="*{password}"></small-->
+                </div>
+
+                <!-- Given Name input -->
+                <div class="mb-3">
+                    <input type="text" id="givenName" name="givenName" class="form-control" maxlength="100"
+                           required placeholder="Given Name *" th:field="*{givenName}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('givenName')}"
+                           th:errors="*{givenName}"></small-->
+                </div>
+
+                <!-- Family Name input -->
+                <div class="mb-3">
+                    <input type="text" id="familyName" name="familyName" class="form-control" maxlength="100"
+                           required placeholder="Family Name *" th:field="*{familyName}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('familyName')}"
+                           th:errors="*{familyName}"></small-->
+                </div>
+
+                <!-- Middle Name input -->
+                <div class="mb-3">
+                    <input type="text" id="middleName" name="middleName" class="form-control" maxlength="100"
+                           placeholder="Middle Name" th:field="*{middleName}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('middleName')}"
+                           th:errors="*{middleName}"></small-->
+                </div>
+
+                <!-- Email input -->
+                <div class="mb-2">
+                    <input type="email" id="email" name="email" class="form-control" maxlength="254" required
+                           placeholder="Email *" th:field="*{email}">
+                    <!--small class="form-text text-danger" th:if="${#fields.hasErrors('email')}"
+                           th:errors="*{email}"></small-->
+                </div>
+
+                <p class="hint mt-0 mb-1" style="color: #696969;">* indicates required field</p>
+
+                <!-- Submit button -->
+                <div class="mb-3 mt-4">
+                    <button type="submit" class="btn">Register</button>
+                </div>
+
+                <!-- Back to Sign In -->
+                <div class="mb-3">
+                    <a th:href="@{/signin?client_id={appClientId}(appClientId=${appClient.id})}" style="color: #696969;
+                 text-decoration: underline;">Back to Sign In</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="toast-container p-3">
+
+        <!-- Display error message if registration fails -->
+        <div th:if="${error != null}" class="toast fade show" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" th:text="${appClient.cname}">Client Application Name</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast">
+                </button>
+            </div>
+            <div class="toast-body">
+                <h6>Registration Failed</h6>
+                <ul>
+                    <li th:text="${error}" />
+                </ul>
+            </div>
+        </div>
+
+        <!-- Display error message if form validation fails -->
+        <div th:if="${#fields.hasErrors('customerRegistrationRequestDto.*')}" class="toast fade show" role="alert">
+            <div class="toast-header">
+                <strong class="me-auto" th:text="${appClient.cname}">Client Application Name</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast">
+                </button>
+            </div>
+            <div class="toast-body">
+                <h6>Validation Errors</h6>
+                <ul>
+                    <li class="mb-1" th:each="err : ${#fields.errors('customerRegistrationRequestDto.*')}" th:text="${err}" />
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
