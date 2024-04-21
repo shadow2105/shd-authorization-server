@@ -18,6 +18,7 @@ logging:
 
 shd:
   allowed-origins: ${SHD_ALLOWED_ORIGINS}
+  issuer-uri: ${SHD_ISSUER_URI}
 
 # Registered Clients
 cms:
