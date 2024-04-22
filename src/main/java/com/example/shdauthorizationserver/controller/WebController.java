@@ -1,5 +1,6 @@
 package com.example.shdauthorizationserver.controller;
 
+import com.example.shdauthorizationserver.controller.exception.BadRequestException;
 import com.example.shdauthorizationserver.model.RegisteredClientStore;
 import com.example.shdauthorizationserver.service.UserService;
 import com.example.shdauthorizationserver.service.exception.UserAlreadyExistsException;
@@ -8,7 +9,6 @@ import com.example.shdauthorizationserver.dto.CustomerRegistrationRequestDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.apache.coyote.BadRequestException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
