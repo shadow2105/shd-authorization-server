@@ -4,6 +4,7 @@ import com.example.shdauthorizationserver.model.dao.cms.CmsCustomerProfileDao;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -35,15 +36,38 @@ public class CmsConfiguration {
     }
 
     @Bean
+    @Profile("default")
+    public RegisteredClient clientCmsDefault() {
+        return RegisteredClient.withId(UUID.randomUUID().toString())
+                // Case - Single Page Application with BFF pattern - Authorization Code with PKCE & Refresh Token
+                .clientId("9DFD919F17AD2C97C24E543C3F954DD3")
+                .clientName("cms")
+                // For testing with Postman (requires a client secret even with PKCE)
+                .clientSecret(passwordEncoder.encode("6JyvSMHFqjKL9Pvo47irtLrKTC17yn7yLyqHh6hB3uQ="))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .redirectUri(cmsRedirectUri)
+                .postLogoutRedirectUri(cmsPostLogoutRedirectUri)
+                .scope(OidcScopes.OPENID)  // required; to indicate that the application intends to use OIDC to verify the user's identity
+                .scope(OidcScopes.PROFILE) // for User (Resource Owner) Profile information
+                .scope(OidcScopes.EMAIL)   // for User Email address
+                .scope(OidcScopes.ADDRESS)
+                .clientSettings(ClientSettings.builder()
+                        .requireAuthorizationConsent(false)
+                        .requireProofKey(true)
+                        .build())
+                .build();
+    }
+
+    @Bean
+    @Profile({"dev", "prod"})
     public RegisteredClient clientCms() {
         return RegisteredClient.withId(UUID.randomUUID().toString())
                 // Case - Single Page Application with BFF pattern - Authorization Code with PKCE & Refresh Token
                 .clientId("9DFD919F17AD2C97C24E543C3F954DD3")
                 .clientName("cms")
-                // Toggle these when testing with Postman (requires a client secret even with PKCE)
-                //.clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
-                .clientSecret(passwordEncoder.encode("6JyvSMHFqjKL9Pvo47irtLrKTC17yn7yLyqHh6hB3uQ="))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(cmsRedirectUri)
