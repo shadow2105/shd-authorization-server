@@ -66,6 +66,16 @@ spring:
     init:
       platform: ${SPRING_JPA_DATABASE}
 
+server:
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/shd.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-alias: shd
+    # https://stackoverflow.com/questions/67949546/android-studio-building-signed-apk-get-key-failed
+    key-password: ${SSL_SHD_KEY_PASSWORD}
+
 logging:
   level:
     org:
@@ -90,4 +100,13 @@ spring:
   sql:
     init:
       platform: ${SPRING_JPA_DATABASE}
+
+server:
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/shd.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-alias: shd
+    key-password: ${SSL_SHD_KEY_PASSWORD}
 
