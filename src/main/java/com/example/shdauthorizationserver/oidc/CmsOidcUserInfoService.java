@@ -34,7 +34,7 @@ public class CmsOidcUserInfoService implements OidcUserInfoService {
                     .preferredUsername(cmsCustomerProfile.getPreferredName())
                     .picture(cmsCustomerProfile.getPicture())
                     .locale(cmsCustomerProfile.getLocale().locale.toString())
-                    .zoneinfo(cmsCustomerProfile.getZoneInfo().label)
+                    .zoneinfo(cmsCustomerProfile.getZoneInfo().toString())
                     .email(cmsCustomerProfile.getEmail())
                     .emailVerified((cmsCustomerProfile.isEmailVerified()))
                     .build();
@@ -168,7 +168,7 @@ public class CmsOidcUserInfoService implements OidcUserInfoService {
                         ? "" : cmsCustomerProfile.getGender().label)
                 .birthdate(cmsCustomerProfile.getBirthDate() == null
                         ? "" : cmsCustomerProfile.getBirthDate().toString())
-                .zoneinfo(cmsCustomerProfile.getZoneInfo().label)
+                .zoneinfo(cmsCustomerProfile.getZoneInfo().toString())
                 .locale(cmsCustomerProfile.getLocale().locale.toString())
                 .phoneNumber(cmsCustomerProfile.getPhoneNumber() == null
                         ? "" : cmsCustomerProfile.getPhoneNumber())
